@@ -1,11 +1,11 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "onnx/red/chainer/version"
+require "onnx/chainer/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "onnx-red-chainer"
-  spec.version       = Onnx::Red::Chainer::VERSION
+  spec.version       = Onnx::Chainer::VERSION
   spec.authors       = ["hatappi"]
   spec.email         = ["hatappi@hatappi.me"]
 
