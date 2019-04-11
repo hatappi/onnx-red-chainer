@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'google-protobuf'
   spec.add_dependency 'red-chainer'
+  spec.add_dependency "numo-narray"
 
   spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "rake", "~> 10.0"

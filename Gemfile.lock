@@ -3,12 +3,13 @@ PATH
   specs:
     onnx-red-chainer (0.1.0)
       google-protobuf
+      numo-narray
       red-chainer
 
 GEM
   remote: https://rubygems.org/
   specs:
-    csv (3.0.7)
+    csv (3.0.8)
     google-protobuf (3.7.1)
     minitest (5.11.3)
     numo-narray (0.9.1.4)
