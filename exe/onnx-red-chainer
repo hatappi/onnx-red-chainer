@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'onnx-chainer/cli'
+
+Onnx::Chainer::CLI.start(ARGV)
