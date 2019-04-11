@@ -5,7 +5,7 @@ module Onnx
     module Operators
       class Gemm < Operator
         class << self
-          def parse(node, initializer_names, inputs, output_name_index)
+          def parse(node, input_names, inputs, output_name_index)
             bias_name = node.input.find { |i| i.match(/_b$/) }
             input = inputs.find { |i| i.name == bias_name }
             output_shape = input.type.tensor_type.shape.dim.map(&:dim_value)
@@ -16,8 +16,6 @@ module Onnx
               node.output.first => "h#{output_name_index}"
             }
             instance_variable_name = "@h#{output_name_index}"
-
-            input_names = node.input.reject { |i| initializer_names.include?(i) }
 
             self.new(input_names: input_names, output_shape: output_shape, output_names: output_names, instance_variable_name: instance_variable_name, need_initialized: need_initialized)
           end
