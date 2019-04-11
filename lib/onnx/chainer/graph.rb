@@ -1,5 +1,6 @@
 require 'onnx/chainer/operators/gemm'
 require 'onnx/chainer/operators/relu'
+require 'numo/narray'
 
 module Onnx
   module Chainer
@@ -38,7 +39,19 @@ module Onnx
           output_names = {}
           nodes.each { |n| output_names.merge!(n.output_names) }
 
-          self.new(onnx_graph.name, nodes, input_names, output_names)
+          # parameter
+          target = {}
+          onnx_graph.initializer.each do |initializer|
+            name = initializer.name
+            dtype = dtype(initializer.data_type)
+
+            arr = dtype.from_binary(initializer.raw_data).reshape(*initializer.dims)
+
+            n = name.split('_')
+            target["/@#{n[1].downcase}/@#{n[2].downcase}"] =  dtype.from_binary(initializer.raw_data).reshape(*initializer.dims)
+          end
+
+          self.new(onnx_graph.name, nodes, input_names, output_names, target)
         end
 
         private
@@ -51,21 +64,33 @@ module Onnx
             return Onnx::Chainer::Operators::Relu
           end
         end
+
+        def dtype(data_type)
+          if data_type == Onnx::TensorProto::DataType::FLOAT
+            Numo::SFloat
+          elsif data_type == Onnx::TensorProto::DataType::INT8
+            Numo::Int8
+          else
+            raise TypeError, 'unexpected value ' + data_type
+          end
+        end
       end
 
-      def initialize(model_name, nodes, input_names, output_names)
+      def initialize(model_name, nodes, input_names, output_names, target)
         @model_name = model_name
         @nodes = nodes
         @input_names = input_names
         @output_names = output_names
+        @target = target
       end
 
       # export file
-      def export(output_path: nil, model_name: nil)
+      def export(output_dir: nil, model_name: nil)
         model_name = model_name || @model_name
         model_name = model_name.capitalize.gsub(/(?:^|_)(.)/){$1.upcase}
 
-        output_path ||= 'model.rb'
+        output_dir ||= '.'
+        FileUtils.mkdir(output_dir) unless Dir.exist?(output_dir)
 
 s = <<EOS
 require 'chainer'
@@ -89,8 +114,12 @@ class #{model_name} < Chainer::Chain
 end
 EOS
 
-        File.open(output_path, 'w') do |f|
+        File.open("#{output_dir}/model.rb", 'w') do |f|
           f.puts(s)
+        end
+
+        File.open("#{output_dir}/resume", 'wb+') do |f|
+          Marshal.dump(@target, f)
         end
       end
     end
