@@ -95,21 +95,21 @@ s = <<EOS
 require 'chainer'
 
 class #{model_name} < Chainer::Chain
-def initialize()
-  super()
-  init_scope do
-    #{@nodes.select(&:need_initialized).map(&:to_initialize_string).join("\n      ")}
+  def initialize()
+    super()
+    init_scope do
+      #{@nodes.select(&:need_initialized).map(&:to_initialize_string).join("\n      ")}
+    end
   end
-end
 
-def call(#{@input_names.values.join(', ')})
-  #{
-    @nodes.map do |n|
-      args = n.input_names.map { |name| @input_names[name] || @output_names[name] }
-      n.to_call_string(args)
-    end.join("\n    ")
-  }
-end
+  def call(#{@input_names.values.join(', ')})
+    #{
+      @nodes.map do |n|
+        args = n.input_names.map { |name| @input_names[name] || @output_names[name] }
+        n.to_call_string(args)
+      end.join("\n    ")
+    }
+  end
 end
 EOS
 

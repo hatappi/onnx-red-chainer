@@ -12,9 +12,9 @@ module OnnxChainer
           need_initialized = node.input.any? { |i| inputs.map(&:name).include?(i) }
 
           output_names = {
-            node.output.first => "h#{output_name_index}"
+            node.output.first => "l#{output_name_index}"
           }
-          instance_variable_name = "@h#{output_name_index}"
+          instance_variable_name = "@l#{output_name_index}"
 
           self.new(input_names: input_names, output_shape: output_shape, output_names: output_names, instance_variable_name: instance_variable_name, need_initialized: need_initialized)
         end
@@ -33,7 +33,7 @@ module OnnxChainer
       end
 
       def to_initialize_string
-        "#{@instance_variable_name} = #{chainer_class}.new(nil, output_size: #{@output_shape})"
+        "#{@instance_variable_name} = #{chainer_class}.new(nil, out_size: #{@output_shape})"
       end
 
       def to_call_string(args)
