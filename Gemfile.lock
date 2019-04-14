@@ -11,8 +11,8 @@ GEM
   specs:
     csv (3.0.8)
     google-protobuf (3.7.1)
-    minitest (5.11.3)
     numo-narray (0.9.1.4)
+    power_assert (1.1.4)
     rake (10.5.0)
     red-chainer (0.4.1)
       numo-narray (>= 0.9.1.1)
@@ -21,15 +21,17 @@ GEM
       csv (>= 3.0.5)
       rubyzip
     rubyzip (1.2.2)
+    test-unit (3.3.2)
+      power_assert
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bundler (~> 1.17)
-  minitest (~> 5.0)
   onnx-red-chainer!
   rake (~> 10.0)
+  test-unit (>= 3.2.9)
 
 BUNDLED WITH
    1.17.2
