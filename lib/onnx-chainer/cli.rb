@@ -20,8 +20,9 @@ module OnnxChainer
         opts.on('-m', '--model_name=MODEL_NAME', 'Model name') { |v| @model_name = v }
         opts.on('-h', '--help', 'show help') { @help = true }
       end
-      @onnx_path = argv.pop
+
       @parser.parse!(argv)
+      @onnx_path = argv.pop
     end
 
     def run
