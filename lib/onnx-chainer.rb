@@ -1,7 +1,11 @@
 require 'chainer'
 require "onnx-chainer/version"
 require "onnx-chainer/graph"
+
+org_verbose = $VERBOSE
+$VERBOSE = nil
 require "onnx-chainer/proto/onnx_pb"
+$VERBOSE = org_verbose
 
 module OnnxChainer
   class Error < StandardError; end

@@ -95,7 +95,7 @@ s = <<EOS
 require 'chainer'
 
 class #{model_name} < Chainer::Chain
-  def initialize()
+  def initialize
     super()
     init_scope do
       #{@nodes.select(&:need_initialized).map(&:to_initialize_string).join("\n      ")}
