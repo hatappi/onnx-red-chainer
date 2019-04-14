@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    onnx-red-chainer (0.1.1)
+    onnx-red-chainer (0.1.2)
       google-protobuf
       numo-narray
       red-chainer
